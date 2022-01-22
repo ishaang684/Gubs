@@ -11,7 +11,6 @@ Double click to draw a card, you can drag the cards around the screen to simulat
 
 Current bugs:
 - The Image for the Dangerous Alchemy Card isn't correct
-- If two cards are perfectly on top of each other, there's no way to seperate them
 - You can double click anywhere instead of having to click on the deck to draw a card
 - Can lose cards by dragging them out of the screen
 
@@ -22,3 +21,6 @@ Plans for future:
 - hovering over a card shows an enlarged version of the card
 - Discard pile that you can drag cards to
 - Multiplayer, people can create/join rooms to play gubs together.
+
+FIXED:
+- Can't drag multiple cards, so cards can't get stuck on top of each other.
