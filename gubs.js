@@ -96,26 +96,42 @@ class Card
 
 //randomly initialize deck of 70 numbers
 const nums = []
+layers = []
 for (let i = 1; i <= 70; i++)
 {
     nums.push(i)
 }
 const shuffledNums = nums.sort((a, b) => 0.5 - Math.random());
-console.log(shuffledNums)
 
 deck = []
 
 //dragging and dropping code
+othersDragging = 0
 addEventListener('mousedown', (event) => 
 {
-    for (let i = 0; i < 70; i++)
+    for (let i = deck.length-1; i >= 0; i--)
     {
-        if (deck[i].collision(event.clientX, event.clientY))
+        for (let j = 0; j < deck.length; j++)
+            {
+                if (deck[j].isDragging)
+                {
+                    othersDragging ++
+                }
+            }
+        // if card is clicked and no other cards are being clicked
+        if (deck[i].collision(event.clientX, event.clientY) && othersDragging == 0)
         {
+            // set card position to mouse position
             deck[i].isDragging = true;
             deck[i].dx = event.clientX - deck[i].x
             deck[i].dy = event.clientY - deck[i].y
+
+            // switch card clicked with last card so card clicked is drawn last
+            temp = deck[deck.length-1]
+            deck[deck.length-1] = deck[i]
+            deck[i] = temp
         }
+        othersDragging = 0
     }
 })
 addEventListener('mousemove', (event) =>
@@ -155,64 +171,64 @@ addEventListener('dblclick', (event) =>
     else if (card >= 25 && card <= 26) {
         new_card = velvetMoth
     }
-    else if (card === 27) {
+    else if (card == 27) {
         new_card = esteemedElder
     }
-    else if (card === 28) {
+    else if (card == 28) {
         new_card = G
     }
-    else if (card === 29) {
+    else if (card == 29) {
         new_card = U
     }
-    else if (card === 30) {
+    else if (card == 30) {
         new_card = B
     }
-    else if (card === 31) {
+    else if (card == 31) {
         new_card = dangerousAlchemy
     }
-    else if (card === 32) {
+    else if (card == 32) {
         new_card = flashFlood
     }
-    else if (card === 33) {
+    else if (card == 33) {
         new_card = gargokPlague
     }
-    else if (card === 34) {
+    else if (card == 34) {
         new_card = rumourOfWasps
     }
-    else if (card === 35) {
+    else if (card == 35) {
         new_card = travelingMerchant
     }
-    else if (card === 36) {
+    else if (card == 36) {
         new_card = cyclone
     }
-    else if (card === 37) {
+    else if (card == 37) {
         new_card = lightning
     }
-    else if (card === 38) {
+    else if (card == 38) {
         new_card = smahlThief
     }
-    else if (card === 39) {
+    else if (card == 39) {
         new_card = singleRing
     }
-    else if (card === 40) {
+    else if (card == 40) {
         new_card = doubleRing
     }
-    else if (card === 41) {
+    else if (card == 41) {
         new_card = tripleRing
     }
-    else if (card === 42) {
+    else if (card == 42) {
         new_card = cricketSong
     }
-    else if (card === 43) {
+    else if (card == 43) {
         new_card = scout
     }
-    else if (card === 44) {
+    else if (card == 44) {
         new_card = blindfold
     }
-    else if (card === 45) {
+    else if (card == 45) {
         new_card = retreat
     }
-    else if (card === 46) {
+    else if (card == 46) {
         new_card = flopBoat
     }
     else if (card >= 47 && card <= 53) {
@@ -250,13 +266,11 @@ function animate()
     requestAnimationFrame(animate)
     c.clearRect(0,0,canvas.width, canvas.height)
 
-    
     c.beginPath()
     c.rect(card_width,card_height,card_width,card_height);
     c.fillStyle = 'chocolate'
     c.fill()
     c.stroke()
-
 
     for (let i = 0; i < 70; i++)
     {
