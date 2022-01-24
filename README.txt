@@ -15,12 +15,12 @@ Current bugs:
 - Can lose cards by dragging them out of the screen
 
 
-
 Plans for future:
 - show instructions on how to play the game
 - hovering over a card shows an enlarged version of the card
 - Discard pile that you can drag cards to
 - Multiplayer, people can create/join rooms to play gubs together.
+
 
 FIXED:
 - Can't drag multiple cards, so cards can't get stuck on top of each other.
