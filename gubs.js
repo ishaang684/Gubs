@@ -7,11 +7,16 @@ canvas.height = innerHeight
 // setting card size relative to screen size
 const card_width = innerWidth / 17;
 const card_height = card_width * 1.38;
-const center_x = card_width / 2;
-const center_y = card_height / 2;
+console.log(card_width)
+console.log(card_height)
+hoverColor = 'yellow'
+clickedColor = 'lime'
+backColor = 'saddlebrown'
+enlargeSize = 4
+outlineSize = 1
 
 // document.body.style.backgroundImage = 'url(Wood_Background.jpg)' 
-document.body.style.backgroundColor = 'saddlebrown'
+document.body.style.backgroundColor = backColor
 
 
 // method for loading in images
@@ -52,15 +57,28 @@ const toadRider = newImage('Toad_Rider.png')
 const travelingMerchant = newImage('Traveling_Merchant.png')
 const tripleRing = newImage('Triple_Ring.png')
 const velvetMoth = newImage('Velvet_Moth.png')
+const gubCursor = newImage('Gub_Cursor.png')
+const cardBack = newImage('Card_Back.jpg')
+
+function roundedRect(ctx, x, y, width, height, radius) {
+    ctx.beginPath();
+    ctx.moveTo(x, y + radius);
+    ctx.arcTo(x, y + height, x + radius, y + height, radius);
+    ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
+    ctx.arcTo(x + width, y, x + width - radius, y, radius);
+    ctx.arcTo(x, y, x, y + radius, radius);
+    ctx.stroke();
+  }
 
 // card class
 // holds a cards image and position
 class Card
 {
+    isHover = false;
     isDragging = false;
     dx = 0;
     dy = 0;
-    constructor(image, x = Math.random() * 10 + card_width, y = Math.random() * 10 + card_height)
+    constructor(image, x = card_width, y = card_height)
     {
         this.x = x
         this.y = y
@@ -71,11 +89,17 @@ class Card
     //draw card to the screen
     draw()
     {
-        // c.beginPath()
-        // c.rect(this.x, this.y, card_width, card_height);
-        // c.fillStyle = this.color
-        // c.fill()
-        // c.stroke()
+        if (this.isHover)
+        {
+            c.beginPath()
+            // c.rect(this.x - 2, this.y - 2, card_width + 4, card_height + 4);
+            // c.rect(this.x, this.y, card_width, card_height)
+            roundedRect(c, this.x - (1 / outlineSize), this.y - (1 / outlineSize), card_width + 2 * (1 / outlineSize), card_height + 2 * (1 / outlineSize), 7)
+            c.fillStyle = this.color
+            c.strokeStyle = backColor
+            c.fill()
+            c.stroke()
+        }
 
         c.drawImage(this.image, this.x, this.y, card_width, card_height)
     }
@@ -96,7 +120,6 @@ class Card
 
 //randomly initialize deck of 70 numbers
 const nums = []
-layers = []
 for (let i = 1; i <= 70; i++)
 {
     nums.push(i)
@@ -119,25 +142,39 @@ addEventListener('mousedown', (event) =>
                 }
             }
         // if card is clicked and no other cards are being clicked
-        if (deck[i].collision(event.clientX, event.clientY) && othersDragging == 0)
+        if (deck[i].collision(event.clientX, event.clientY) && othersDragging == 0) 
         {
             // set card position to mouse position
             deck[i].isDragging = true;
             deck[i].dx = event.clientX - deck[i].x
             deck[i].dy = event.clientY - deck[i].y
 
-            // switch card clicked with last card so card clicked is drawn last
+            // switch card clicked with last card so card clicked is drawn to screen last
             temp = deck[deck.length-1]
             deck[deck.length-1] = deck[i]
             deck[i] = temp
+            // temp = deck.splice(indexOf(deck[i]))
         }
         othersDragging = 0
     }
 })
+
+var mouseX, mouseY
 addEventListener('mousemove', (event) =>
 {
+    mouseX = event.clientX
+    mouseY = event.clientY
     for (let i = 0; i < 70; i++)
     {
+        if (deck[i].collision(event.clientX, event.clientY))
+        {
+            deck[i].color = hoverColor
+            deck[i].isHover = true
+        }
+        else
+        {
+            deck[i].isHover = false
+        }
         if (deck[i].isDragging)
         { 
             deck[i].x = event.clientX - deck[i].dx
@@ -260,22 +297,34 @@ addEventListener('dblclick', (event) =>
     deck.push(new Card(new_card))
 })
 
-// drawing cards to the screen
+// drawing to the screen
 function animate()
 {
     requestAnimationFrame(animate)
     c.clearRect(0,0,canvas.width, canvas.height)
 
-    c.beginPath()
-    c.rect(card_width,card_height,card_width,card_height);
-    c.fillStyle = 'chocolate'
-    c.fill()
-    c.stroke()
+    // c.beginPath()
+    // c.rect(card_width,card_height,card_width,card_height);
+    // c.fillStyle = 'chocolate'
+    // c.strokeStyle = 'black'
+    // c.fill()
+    // c.stroke()
+    c.drawImage(cardBack, card_width, card_height, card_width, card_height)
 
-    for (let i = 0; i < 70; i++)
+
+    for (let i = 0; i < deck.length; i++)
     {
+        if (deck[i].isDragging)
+        {
+            deck[i].color = clickedColor
+        }
         deck[i].draw()
+        if (deck[i].isHover)
+        {
+            c.drawImage(deck[i].image, innerWidth - (G.width / innerWidth), innerHeight - 600, 424, 589)
+        }
     }
+    c.drawImage(gubCursor, mouseX - 18, mouseY - 36, 36, 72)
     //console.log(card)
 }
 
