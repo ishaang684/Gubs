@@ -12,7 +12,7 @@ console.log(card_height)
 hoverColor = 'yellow'
 clickedColor = 'lime'
 backColor = 'saddlebrown'
-enlargeSize = 4
+enlargeSize = innerWidth / 6
 outlineSize = 1
 
 // document.body.style.backgroundImage = 'url(Wood_Background.jpg)' 
@@ -321,7 +321,8 @@ function animate()
         deck[i].draw()
         if (deck[i].isHover)
         {
-            c.drawImage(deck[i].image, innerWidth - (G.width / innerWidth), innerHeight - 600, 424, 589)
+            // draw card being hovered over proportional to screen in bottom right of screen
+            c.drawImage(deck[i].image, innerWidth - G.height, innerHeight - G.height, 1 * G.width, 1 * G.height)
         }
     }
     c.drawImage(gubCursor, mouseX - 18, mouseY - 36, 36, 72)
