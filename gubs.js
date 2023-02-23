@@ -12,7 +12,7 @@ console.log(card_height)
 hoverColor = 'yellow'
 clickedColor = 'lime'
 backColor = 'saddlebrown'
-enlargeSize = innerWidth / 6
+enlargeSize = innerWidth / 8
 outlineSize = 1
 
 // document.body.style.backgroundImage = 'url(Wood_Background.jpg)' 
